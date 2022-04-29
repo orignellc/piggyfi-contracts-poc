@@ -1,0 +1,508 @@
+{
+  "contractName": "CustodianWalletLogic",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "factory",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"factory\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"factory()\":{\"notice\":\"address of factory\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/CustodianWalletLogic.sol\":\"CustodianWalletLogic\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/CustodianWalletLogic.sol\":{\"keccak256\":\"0x10656ae678a89996a75006197b5557491f1fa8bfcebfc8d13953cbf9fe46b002\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c3d5fae1909dc83cb3549a7c6897605fa943febca82be2619d4c7a2b72309d73\",\"dweb:/ipfs/QmbVF73p2qiq1adi45F8GBthRiYD4YSnLCSaeyvDuGhbVu\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610114806100206000396000f3fe6080604052348015600f57600080fd5b50600436106045576000357c010000000000000000000000000000000000000000000000000000000090048063c45a015514604a575b600080fd5b60506064565b604051605b919060c5565b60405180910390f35b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b600060b1826088565b9050919050565b60bf8160a8565b82525050565b600060208201905060d8600083018460b8565b9291505056fea26469706673582212209369e6952e397d5204e6a5e5ddf10c282a54133b6a3dbffaec1d820ebfcc2db064736f6c634300080d0033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b50600436106045576000357c010000000000000000000000000000000000000000000000000000000090048063c45a015514604a575b600080fd5b60506064565b604051605b919060c5565b60405180910390f35b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b600060b1826088565b9050919050565b60bf8160a8565b82525050565b600060208201905060d8600083018460b8565b9291505056fea26469706673582212209369e6952e397d5204e6a5e5ddf10c282a54133b6a3dbffaec1d820ebfcc2db064736f6c634300080d0033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [
+    {
+      "ast": {
+        "nodeType": "YulBlock",
+        "src": "0:590:10",
+        "statements": [
+          {
+            "body": {
+              "nodeType": "YulBlock",
+              "src": "52:81:10",
+              "statements": [
+                {
+                  "nodeType": "YulAssignment",
+                  "src": "62:65:10",
+                  "value": {
+                    "arguments": [
+                      {
+                        "name": "value",
+                        "nodeType": "YulIdentifier",
+                        "src": "77:5:10"
+                      },
+                      {
+                        "kind": "number",
+                        "nodeType": "YulLiteral",
+                        "src": "84:42:10",
+                        "type": "",
+                        "value": "0xffffffffffffffffffffffffffffffffffffffff"
+                      }
+                    ],
+                    "functionName": {
+                      "name": "and",
+                      "nodeType": "YulIdentifier",
+                      "src": "73:3:10"
+                    },
+                    "nodeType": "YulFunctionCall",
+                    "src": "73:54:10"
+                  },
+                  "variableNames": [
+                    {
+                      "name": "cleaned",
+                      "nodeType": "YulIdentifier",
+                      "src": "62:7:10"
+                    }
+                  ]
+                }
+              ]
+            },
+            "name": "cleanup_t_uint160",
+            "nodeType": "YulFunctionDefinition",
+            "parameters": [
+              {
+                "name": "value",
+                "nodeType": "YulTypedName",
+                "src": "34:5:10",
+                "type": ""
+              }
+            ],
+            "returnVariables": [
+              {
+                "name": "cleaned",
+                "nodeType": "YulTypedName",
+                "src": "44:7:10",
+                "type": ""
+              }
+            ],
+            "src": "7:126:10"
+          },
+          {
+            "body": {
+              "nodeType": "YulBlock",
+              "src": "184:51:10",
+              "statements": [
+                {
+                  "nodeType": "YulAssignment",
+                  "src": "194:35:10",
+                  "value": {
+                    "arguments": [
+                      {
+                        "name": "value",
+                        "nodeType": "YulIdentifier",
+                        "src": "223:5:10"
+                      }
+                    ],
+                    "functionName": {
+                      "name": "cleanup_t_uint160",
+                      "nodeType": "YulIdentifier",
+                      "src": "205:17:10"
+                    },
+                    "nodeType": "YulFunctionCall",
+                    "src": "205:24:10"
+                  },
+                  "variableNames": [
+                    {
+                      "name": "cleaned",
+                      "nodeType": "YulIdentifier",
+                      "src": "194:7:10"
+                    }
+                  ]
+                }
+              ]
+            },
+            "name": "cleanup_t_address",
+            "nodeType": "YulFunctionDefinition",
+            "parameters": [
+              {
+                "name": "value",
+                "nodeType": "YulTypedName",
+                "src": "166:5:10",
+                "type": ""
+              }
+            ],
+            "returnVariables": [
+              {
+                "name": "cleaned",
+                "nodeType": "YulTypedName",
+                "src": "176:7:10",
+                "type": ""
+              }
+            ],
+            "src": "139:96:10"
+          },
+          {
+            "body": {
+              "nodeType": "YulBlock",
+              "src": "306:53:10",
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "name": "pos",
+                        "nodeType": "YulIdentifier",
+                        "src": "323:3:10"
+                      },
+                      {
+                        "arguments": [
+                          {
+                            "name": "value",
+                            "nodeType": "YulIdentifier",
+                            "src": "346:5:10"
+                          }
+                        ],
+                        "functionName": {
+                          "name": "cleanup_t_address",
+                          "nodeType": "YulIdentifier",
+                          "src": "328:17:10"
+                        },
+                        "nodeType": "YulFunctionCall",
+                        "src": "328:24:10"
+                      }
+                    ],
+                    "functionName": {
+                      "name": "mstore",
+                      "nodeType": "YulIdentifier",
+                      "src": "316:6:10"
+                    },
+                    "nodeType": "YulFunctionCall",
+                    "src": "316:37:10"
+                  },
+                  "nodeType": "YulExpressionStatement",
+                  "src": "316:37:10"
+                }
+              ]
+            },
+            "name": "abi_encode_t_address_to_t_address_fromStack",
+            "nodeType": "YulFunctionDefinition",
+            "parameters": [
+              {
+                "name": "value",
+                "nodeType": "YulTypedName",
+                "src": "294:5:10",
+                "type": ""
+              },
+              {
+                "name": "pos",
+                "nodeType": "YulTypedName",
+                "src": "301:3:10",
+                "type": ""
+              }
+            ],
+            "src": "241:118:10"
+          },
+          {
+            "body": {
+              "nodeType": "YulBlock",
+              "src": "463:124:10",
+              "statements": [
+                {
+                  "nodeType": "YulAssignment",
+                  "src": "473:26:10",
+                  "value": {
+                    "arguments": [
+                      {
+                        "name": "headStart",
+                        "nodeType": "YulIdentifier",
+                        "src": "485:9:10"
+                      },
+                      {
+                        "kind": "number",
+                        "nodeType": "YulLiteral",
+                        "src": "496:2:10",
+                        "type": "",
+                        "value": "32"
+                      }
+                    ],
+                    "functionName": {
+                      "name": "add",
+                      "nodeType": "YulIdentifier",
+                      "src": "481:3:10"
+                    },
+                    "nodeType": "YulFunctionCall",
+                    "src": "481:18:10"
+                  },
+                  "variableNames": [
+                    {
+                      "name": "tail",
+                      "nodeType": "YulIdentifier",
+                      "src": "473:4:10"
+                    }
+                  ]
+                },
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "name": "value0",
+                        "nodeType": "YulIdentifier",
+                        "src": "553:6:10"
+                      },
+                      {
+                        "arguments": [
+                          {
+                            "name": "headStart",
+                            "nodeType": "YulIdentifier",
+                            "src": "566:9:10"
+                          },
+                          {
+                            "kind": "number",
+                            "nodeType": "YulLiteral",
+                            "src": "577:1:10",
+                            "type": "",
+                            "value": "0"
+                          }
+                        ],
+                        "functionName": {
+                          "name": "add",
+                          "nodeType": "YulIdentifier",
+                          "src": "562:3:10"
+                        },
+                        "nodeType": "YulFunctionCall",
+                        "src": "562:17:10"
+                      }
+                    ],
+                    "functionName": {
+                      "name": "abi_encode_t_address_to_t_address_fromStack",
+                      "nodeType": "YulIdentifier",
+                      "src": "509:43:10"
+                    },
+                    "nodeType": "YulFunctionCall",
+                    "src": "509:71:10"
+                  },
+                  "nodeType": "YulExpressionStatement",
+                  "src": "509:71:10"
+                }
+              ]
+            },
+            "name": "abi_encode_tuple_t_address__to_t_address__fromStack_reversed",
+            "nodeType": "YulFunctionDefinition",
+            "parameters": [
+              {
+                "name": "headStart",
+                "nodeType": "YulTypedName",
+                "src": "435:9:10",
+                "type": ""
+              },
+              {
+                "name": "value0",
+                "nodeType": "YulTypedName",
+                "src": "447:6:10",
+                "type": ""
+              }
+            ],
+            "returnVariables": [
+              {
+                "name": "tail",
+                "nodeType": "YulTypedName",
+                "src": "458:4:10",
+                "type": ""
+              }
+            ],
+            "src": "365:222:10"
+          }
+        ]
+      },
+      "contents": "{\n\n    function cleanup_t_uint160(value) -> cleaned {\n        cleaned := and(value, 0xffffffffffffffffffffffffffffffffffffffff)\n    }\n\n    function cleanup_t_address(value) -> cleaned {\n        cleaned := cleanup_t_uint160(value)\n    }\n\n    function abi_encode_t_address_to_t_address_fromStack(value, pos) {\n        mstore(pos, cleanup_t_address(value))\n    }\n\n    function abi_encode_tuple_t_address__to_t_address__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_address_to_t_address_fromStack(value0,  add(headStart, 0))\n\n    }\n\n}\n",
+      "id": 10,
+      "language": "Yul",
+      "name": "#utility.yul"
+    }
+  ],
+  "sourceMap": "57:96:4:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "57:96:4:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;128:22;;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;:::o;7:126:10:-;44:7;84:42;77:5;73:54;62:65;;7:126;;;:::o;139:96::-;176:7;205:24;223:5;205:24;:::i;:::-;194:35;;139:96;;;:::o;241:118::-;328:24;346:5;328:24;:::i;:::-;323:3;316:37;241:118;;:::o;365:222::-;458:4;496:2;485:9;481:18;473:26;;509:71;577:1;566:9;562:17;553:6;509:71;:::i;:::-;365:222;;;;:::o",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ncontract CustodianWalletLogic {\n    /// @notice address of factory\n    address public factory;\n}\n",
+  "sourcePath": "/Users/drewhyte/Sites/SOLIDITY/piggyfi-contract-avax-poc/contracts/CustodianWalletLogic.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/CustodianWalletLogic.sol",
+    "exportedSymbols": {
+      "CustodianWalletLogic": [
+        716
+      ]
+    },
+    "id": 717,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 712,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:23:4"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "CustodianWalletLogic",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 716,
+        "linearizedBaseContracts": [
+          716
+        ],
+        "name": "CustodianWalletLogic",
+        "nameLocation": "66:20:4",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "documentation": {
+              "id": 713,
+              "nodeType": "StructuredDocumentation",
+              "src": "93:30:4",
+              "text": "@notice address of factory"
+            },
+            "functionSelector": "c45a0155",
+            "id": 715,
+            "mutability": "mutable",
+            "name": "factory",
+            "nameLocation": "143:7:4",
+            "nodeType": "VariableDeclaration",
+            "scope": 716,
+            "src": "128:22:4",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 714,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "128:7:4",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "visibility": "public"
+          }
+        ],
+        "scope": 717,
+        "src": "57:96:4",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:122:4"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/CustodianWalletLogic.sol",
+    "exportedSymbols": {
+      "CustodianWalletLogic": [
+        716
+      ]
+    },
+    "id": 717,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 712,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:23:4"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "CustodianWalletLogic",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 716,
+        "linearizedBaseContracts": [
+          716
+        ],
+        "name": "CustodianWalletLogic",
+        "nameLocation": "66:20:4",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "documentation": {
+              "id": 713,
+              "nodeType": "StructuredDocumentation",
+              "src": "93:30:4",
+              "text": "@notice address of factory"
+            },
+            "functionSelector": "c45a0155",
+            "id": 715,
+            "mutability": "mutable",
+            "name": "factory",
+            "nameLocation": "143:7:4",
+            "nodeType": "VariableDeclaration",
+            "scope": 716,
+            "src": "128:22:4",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 714,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "128:7:4",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "visibility": "public"
+          }
+        ],
+        "scope": 717,
+        "src": "57:96:4",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:122:4"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.6",
+  "updatedAt": "2022-04-29T14:53:08.929Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "factory()": {
+        "notice": "address of factory"
+      }
+    },
+    "version": 1
+  }
+}
