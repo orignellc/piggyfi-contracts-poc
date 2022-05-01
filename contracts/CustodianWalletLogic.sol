@@ -72,4 +72,13 @@ contract CustodianWalletLogic is Types {
 
     return balance;
   }
+
+  function sendFunds(address _to, uint256 _amount) external {
+    require(_to != address(this), "CWL: self forbidden");
+    require(_amount > 0, "CWL: amount cannot equal 0");
+    require(_to != address(0x0), "CWL: invalid to address");
+    require(this.availBalance() >= _amount, "CWL: insufficient funds");
+
+    IERC20(_getEscrow().usdcToken()).transfer(_to, _amount);
+  }
 }
