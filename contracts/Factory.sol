@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./CustodianWalletLogic.sol";
 import "./CustodianWalletProxy.sol";
+import "./Escrow.sol";
 
 /**
  * @dev Factotory responsible for deploying Escrow, Custodian Wallet Logic and
@@ -23,12 +24,11 @@ contract Factory {
   /// @notice the address of the Custodian Wallet Logic
   address public custodianWallet;
 
+  address public escrowContractAddress;
+
   /// @notice mapping of account unique id to custodian wallet
   /// Note avoid passing predictable number such as incremental number. Use UUID string instead
   mapping(string => address) public accounts;
-
-  /// @notice address of accepted USDC on deployed chain
-  address public usdcToken;
 
   event NewCustodian(string uniqueId, address indexed account);
 
@@ -44,20 +44,8 @@ contract Factory {
 
   constructor() {
     ochestrator = msg.sender;
+    escrowContractAddress = address(new Escrow(msg.sender));
     custodianWallet = address(new CustodianWalletLogic());
-  }
-
-  /**
-   * @dev allow deployer to update of USD Token contract address
-   * @param usdcContractAddress is the address of the chosen stabel currency to accepted
-   * Note use with caution, once a certain USD token is accepted changing will make the other USD token stuck
-   */
-  function setUsdcTokenAddress(address usdcContractAddress)
-    public
-    onlyOchesrator
-  {
-    require(usdcContractAddress != address(0x0), "F: invalid address");
-    usdcToken = usdcContractAddress;
   }
 
   /**
@@ -72,7 +60,7 @@ contract Factory {
     require(accounts[uuid] == address(0x0), "F: account exist");
 
     address wallet = address(
-      new CustodianWalletProxy(custodianWallet, ochestrator, address(this))
+      new CustodianWalletProxy(custodianWallet, escrowContractAddress)
     );
     accounts[uuid] = wallet;
 
