@@ -22,8 +22,15 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 const fs = require("fs");
 const privateKey = fs.readFileSync(".key").toString().trim();
+const { snowtraceApiKey } = require("./.env.json");
 
 module.exports = {
+  plugins: ["truffle-plugin-verify"],
+
+  api_keys: {
+    snowtrace: snowtraceApiKey,
+  },
+
   /**
    * Networks define how you connect to your ethereum client and let you set the
    * defaults web3 uses to send transactions. If you don't specify one truffle

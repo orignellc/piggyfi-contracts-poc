@@ -1,7 +1,7 @@
 ## Contract Addresses (AVAX Fuji Testnet C-Chain)
 
 **Factory:** 0xff3F6eBfe49f94094ea80ced4cbcd49DE98Af831  
-**Custodian Wallet Logic**:  
+**Custodian Wallet Logic**: 0xE333B863Fc1a28a95B7548039Cc78a814eC7E363
 **Escrow**: 0xf16824cdED50071766Fb4aC3e3c9A02Bdeccb040  
 **USDC($)**: 0x7dcA4a43D98829bd2adC6657f7fE0fFEb86b60c0  
 
