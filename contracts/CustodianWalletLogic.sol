@@ -27,14 +27,26 @@ contract CustodianWalletLogic is Types {
   /// @notice when a customer buy USD with local fiat
   function newBuyOrder(
     address _seller,
+    address _receiver,
     uint256 _amount,
     uint256 _rate,
     uint256 _fee
   ) external returns (uint256) {
+    address usdcAddress = _getEscrow().usdcToken();
+
+    require(_seller != address(0x0), "CWL: seller not set");
+    require(usdcAddress != address(0x0), "CWL: usdc token not set");
+
+    require(
+      IERC20(usdcAddress).balanceOf(_seller) >= _amount,
+      "C: not enough USD"
+    );
+
     return
       _getEscrow().newOrder(
         _seller, // vendor
         address(this),
+        _receiver,
         _amount,
         _rate,
         _fee,
@@ -45,6 +57,7 @@ contract CustodianWalletLogic is Types {
   /// @notice when a customer sell USD for local fiat to vendor
   function newSellOrder(
     address _buyer,
+    address _receiver,
     uint256 _amount,
     uint256 _rate,
     uint256 _fee
@@ -53,6 +66,7 @@ contract CustodianWalletLogic is Types {
       _getEscrow().newOrder(
         address(this),
         _buyer, //vendor
+        _receiver,
         _amount,
         _rate,
         _fee,
@@ -66,19 +80,38 @@ contract CustodianWalletLogic is Types {
     uint256 balance = this.getTotalBalance();
 
     for (uint256 queue = 0; queue < (openOrders.length - 1); queue++) {
-      Order memory order = _getEscrow().getOrderId(openOrders[queue]);
+      Order memory order = _getEscrow().getOrderById(openOrders[queue]);
       balance -= order.amount; // subtract amount of open order
     }
 
     return balance;
   }
 
-  function sendFunds(address _to, uint256 _amount) external {
+  function approveOrder(uint256 _orderId) external {
+    uint256[] memory openOrders = this.getOpenOrders();
+
+    Order memory order = _getEscrow().getOrderById(openOrders[_orderId]);
+
+    require(order.seller == address(this), "CWL: invalid order");
+
+    _getEscrow().closeOpenOrder(address(this), _orderId);
+
+    _sendFunds(order.receiver, order.amount, order.fee);
+
+    emit OrderFulfilled(_orderId);
+  }
+
+  function _sendFunds(
+    address _to,
+    uint256 _amount,
+    uint256 _fee
+  ) internal {
     require(_to != address(this), "CWL: self forbidden");
-    require(_amount > 0, "CWL: amount cannot equal 0");
     require(_to != address(0x0), "CWL: invalid to address");
+    require(_amount > 0, "CWL: amount cannot equal 0");
     require(this.availBalance() >= _amount, "CWL: insufficient funds");
 
     IERC20(_getEscrow().usdcToken()).transfer(_to, _amount);
+    IERC20(_getEscrow().usdcToken()).transfer(address(_getEscrow()), _fee);
   }
 }

@@ -18,10 +18,10 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
-//
-// const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+
+const fs = require("fs");
+const privateKey = fs.readFileSync(".key").toString().trim();
 
 module.exports = {
   /**
@@ -46,6 +46,24 @@ module.exports = {
       port: 8545, // Standard Ethereum port (default: none)
       network_id: "*", // Any network (default: none)
     },
+    fuji: {
+      provider: function () {
+        return new HDWalletProvider(
+          privateKey,
+          `https://api.avax-test.network/ext/bc/C/rpc`
+        );
+      },
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      networkCheckTimeoutnetworkCheckTimeout: 60000,
+      network_id: "43113",
+
+      // gas: 3000000,
+      // gasPrice: 470000000000,
+      // skipDryRun: true,
+    },
+
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port

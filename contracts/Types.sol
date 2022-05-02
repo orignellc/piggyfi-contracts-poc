@@ -4,8 +4,9 @@ pragma solidity ^0.8.0;
 contract Types {
   /// @notice structure of an order
   struct Order {
-    address vendor;
-    address customer;
+    address seller;
+    address buyer;
+    address receiver;
     uint256 amount;
     uint256 rate;
     uint256 fee;
@@ -34,9 +35,14 @@ contract Types {
     uint256 orderId,
     address indexed seller,
     address indexed buyer,
+    address indexed receiver,
     uint256 amount,
     uint256 rate,
     uint256 fee,
     uint8 orderType
   );
+
+  event OrderFulfilled(uint256 orderId);
+
+  event ClosedOrder(uint256 orderId);
 }

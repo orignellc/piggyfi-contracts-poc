@@ -42,16 +42,19 @@ contract Escrow is Types {
   function newOrder(
     address _seller,
     address _buyer,
+    address _receiver,
     uint256 _amount,
     uint256 _rate,
     uint256 _fee,
     uint8 _orderType
   ) public returns (uint256) {
     require(msg.sender == _buyer, "C: customer only");
+    require(_amount > 0, "C: invalid order");
 
     Order memory order = Order(
       _seller,
       _buyer,
+      _receiver,
       _amount,
       _rate,
       _fee,
@@ -66,7 +69,16 @@ contract Escrow is Types {
 
     openOrders[_seller].push(orderId);
 
-    emit OpenOrder(orderId, _seller, _buyer, _amount, _rate, _fee, _orderType);
+    emit OpenOrder(
+      orderId,
+      _seller,
+      _buyer,
+      _receiver,
+      _amount,
+      _rate,
+      _fee,
+      _orderType
+    );
 
     return orderId;
   }
@@ -83,8 +95,19 @@ contract Escrow is Types {
     return openOrders[_seller];
   }
 
-  function getOrderId(uint256 _orderId) public view returns (Order memory) {
+  function getOrderById(uint256 _orderId) public view returns (Order memory) {
     return orders[_orderId];
+  }
+
+  function closeOpenOrder(address _seller, uint256 _orderId) public {
+    require(msg.sender == _seller, "C: only seller");
+    delete openOrders[_seller][_orderId];
+
+    Order storage order = orders[_orderId];
+
+    order.fulfiledTime = block.timestamp;
+
+    emit ClosedOrder(_orderId);
   }
 
   /**

@@ -22,7 +22,7 @@ contract Factory {
   address public ochestrator;
 
   /// @notice the address of the Custodian Wallet Logic
-  address public custodianWallet;
+  address public custodianWalletLogic;
 
   address public escrowContractAddress;
 
@@ -45,7 +45,7 @@ contract Factory {
   constructor() {
     ochestrator = msg.sender;
     escrowContractAddress = address(new Escrow(msg.sender));
-    custodianWallet = address(new CustodianWalletLogic());
+    custodianWalletLogic = address(new CustodianWalletLogic());
   }
 
   /**
@@ -60,7 +60,7 @@ contract Factory {
     require(accounts[uuid] == address(0x0), "F: account exist");
 
     address wallet = address(
-      new CustodianWalletProxy(custodianWallet, escrowContractAddress)
+      new CustodianWalletProxy(custodianWalletLogic, ochestrator, address(this))
     );
     accounts[uuid] = wallet;
 
