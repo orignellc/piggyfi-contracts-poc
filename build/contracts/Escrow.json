@@ -16,85 +16,8 @@
   "sourceMap": "57:38:6:-:0;;;77:16;;;;;;;;;;57:38;;;;;;",
   "deployedSourceMap": "57:38:6:-:0;;;;;",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ncontract Escrow {\n  constructor() {}\n}\n",
-  "sourcePath": "/Users/drewhyte/Sites/SOLIDITY/piggyfi-contract-avax-poc/contracts/Escrow.sol",
+  "sourcePath": "/Users/iemarjay/Projects/JS/piggyfi-contracts-poc/contracts/Escrow.sol",
   "ast": {
-    "absolutePath": "project:/contracts/Escrow.sol",
-    "exportedSymbols": {
-      "Escrow": [
-        790
-      ]
-    },
-    "id": 791,
-    "license": "MIT",
-    "nodeType": "SourceUnit",
-    "nodes": [
-      {
-        "id": 785,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
-        "nodeType": "PragmaDirective",
-        "src": "32:23:6"
-      },
-      {
-        "abstract": false,
-        "baseContracts": [],
-        "canonicalName": "Escrow",
-        "contractDependencies": [],
-        "contractKind": "contract",
-        "fullyImplemented": true,
-        "id": 790,
-        "linearizedBaseContracts": [
-          790
-        ],
-        "name": "Escrow",
-        "nameLocation": "66:6:6",
-        "nodeType": "ContractDefinition",
-        "nodes": [
-          {
-            "body": {
-              "id": 788,
-              "nodeType": "Block",
-              "src": "91:2:6",
-              "statements": []
-            },
-            "id": 789,
-            "implemented": true,
-            "kind": "constructor",
-            "modifiers": [],
-            "name": "",
-            "nameLocation": "-1:-1:-1",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 786,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "88:2:6"
-            },
-            "returnParameters": {
-              "id": 787,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "91:0:6"
-            },
-            "scope": 790,
-            "src": "77:16:6",
-            "stateMutability": "nonpayable",
-            "virtual": false,
-            "visibility": "public"
-          }
-        ],
-        "scope": 791,
-        "src": "57:38:6",
-        "usedErrors": []
-      }
-    ],
-    "src": "32:64:6"
-  },
-  "legacyAST": {
     "absolutePath": "project:/contracts/Escrow.sol",
     "exportedSymbols": {
       "Escrow": [
@@ -176,8 +99,8 @@
     "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.6",
-  "updatedAt": "2022-04-29T14:53:08.934Z",
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-04-29T21:15:22.322Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

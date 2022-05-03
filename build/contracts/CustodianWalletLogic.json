@@ -323,88 +323,8 @@
   "sourceMap": "57:96:4:-:0;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "57:96:4:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;128:22;;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;:::o;7:126:10:-;44:7;84:42;77:5;73:54;62:65;;7:126;;;:::o;139:96::-;176:7;205:24;223:5;205:24;:::i;:::-;194:35;;139:96;;;:::o;241:118::-;328:24;346:5;328:24;:::i;:::-;323:3;316:37;241:118;;:::o;365:222::-;458:4;496:2;485:9;481:18;473:26;;509:71;577:1;566:9;562:17;553:6;509:71;:::i;:::-;365:222;;;;:::o",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ncontract CustodianWalletLogic {\n    /// @notice address of factory\n    address public factory;\n}\n",
-  "sourcePath": "/Users/drewhyte/Sites/SOLIDITY/piggyfi-contract-avax-poc/contracts/CustodianWalletLogic.sol",
+  "sourcePath": "/Users/iemarjay/Projects/JS/piggyfi-contracts-poc/contracts/CustodianWalletLogic.sol",
   "ast": {
-    "absolutePath": "project:/contracts/CustodianWalletLogic.sol",
-    "exportedSymbols": {
-      "CustodianWalletLogic": [
-        716
-      ]
-    },
-    "id": 717,
-    "license": "MIT",
-    "nodeType": "SourceUnit",
-    "nodes": [
-      {
-        "id": 712,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
-        "nodeType": "PragmaDirective",
-        "src": "32:23:4"
-      },
-      {
-        "abstract": false,
-        "baseContracts": [],
-        "canonicalName": "CustodianWalletLogic",
-        "contractDependencies": [],
-        "contractKind": "contract",
-        "fullyImplemented": true,
-        "id": 716,
-        "linearizedBaseContracts": [
-          716
-        ],
-        "name": "CustodianWalletLogic",
-        "nameLocation": "66:20:4",
-        "nodeType": "ContractDefinition",
-        "nodes": [
-          {
-            "constant": false,
-            "documentation": {
-              "id": 713,
-              "nodeType": "StructuredDocumentation",
-              "src": "93:30:4",
-              "text": "@notice address of factory"
-            },
-            "functionSelector": "c45a0155",
-            "id": 715,
-            "mutability": "mutable",
-            "name": "factory",
-            "nameLocation": "143:7:4",
-            "nodeType": "VariableDeclaration",
-            "scope": 716,
-            "src": "128:22:4",
-            "stateVariable": true,
-            "storageLocation": "default",
-            "typeDescriptions": {
-              "typeIdentifier": "t_address",
-              "typeString": "address"
-            },
-            "typeName": {
-              "id": 714,
-              "name": "address",
-              "nodeType": "ElementaryTypeName",
-              "src": "128:7:4",
-              "stateMutability": "nonpayable",
-              "typeDescriptions": {
-                "typeIdentifier": "t_address",
-                "typeString": "address"
-              }
-            },
-            "visibility": "public"
-          }
-        ],
-        "scope": 717,
-        "src": "57:96:4",
-        "usedErrors": []
-      }
-    ],
-    "src": "32:122:4"
-  },
-  "legacyAST": {
     "absolutePath": "project:/contracts/CustodianWalletLogic.sol",
     "exportedSymbols": {
       "CustodianWalletLogic": [
@@ -489,8 +409,8 @@
     "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.6",
-  "updatedAt": "2022-04-29T14:53:08.929Z",
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-04-29T21:15:22.318Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
