@@ -1,4 +1,5 @@
 const Factory = artifacts.require("Factory");
+const Escrow = artifacts.require("Escrow");
 const USDC = artifacts.require("USDC");
 const { expectRevert } = require("@openzeppelin/test-helpers");
 const { utils } = require("ethers");
@@ -7,6 +8,7 @@ contract("Factory", function ([deployer, account2]) {
   before(async function () {
     this.factory = await Factory.deployed();
     this.usdc = await USDC.deployed();
+    this.escrow = await Escrow.deployed();
   });
 
   it("should set deployer as ochestrator address", async function () {
@@ -18,9 +20,9 @@ contract("Factory", function ([deployer, account2]) {
   it("should be able to update USDC token address", async function () {
     const newTokenAddress = await this.usdc.address;
 
-    await this.factory.setUsdcTokenAddress(newTokenAddress);
+    await this.escrow.setUsdcTokenAddress(newTokenAddress);
 
-    const usdcToken = await this.factory.usdcToken();
+    const usdcToken = await this.escrow.usdcToken();
 
     return assert.equal(usdcToken, newTokenAddress);
   });
@@ -29,7 +31,7 @@ contract("Factory", function ([deployer, account2]) {
     const newTokenAddress = await this.usdc.address;
 
     await expectRevert(
-      this.factory.setUsdcTokenAddress(newTokenAddress, { from: account2 }),
+      this.escrow.setUsdcTokenAddress(newTokenAddress, { from: account2 }),
       "F: only ochestrator"
     );
   });
@@ -38,7 +40,7 @@ contract("Factory", function ([deployer, account2]) {
     const invalidAddress = "0x0000000000000000000000000000000000000000";
 
     await expectRevert(
-      this.factory.setUsdcTokenAddress(invalidAddress),
+      this.escrow.setUsdcTokenAddress(invalidAddress),
       "F: invalid address"
     );
   });

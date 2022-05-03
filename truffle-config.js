@@ -18,12 +18,19 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
-//
-// const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+
+const fs = require("fs");
+const privateKey = fs.readFileSync(".key").toString().trim();
+const { snowtraceApiKey } = require("./.env.json");
 
 module.exports = {
+  plugins: ["truffle-plugin-verify"],
+
+  api_keys: {
+    snowtrace: snowtraceApiKey,
+  },
+
   /**
    * Networks define how you connect to your ethereum client and let you set the
    * defaults web3 uses to send transactions. If you don't specify one truffle
@@ -46,6 +53,24 @@ module.exports = {
       port: 8545, // Standard Ethereum port (default: none)
       network_id: "*", // Any network (default: none)
     },
+    fuji: {
+      provider: function () {
+        return new HDWalletProvider(
+          privateKey,
+          `https://api.avax-test.network/ext/bc/C/rpc`
+        );
+      },
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      networkCheckTimeoutnetworkCheckTimeout: 60000,
+      network_id: "43113",
+
+      // gas: 3000000,
+      // gasPrice: 470000000000,
+      // skipDryRun: true,
+    },
+
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -81,7 +106,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.8.13", // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.8.6", // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       settings: {
         // See the solidity docs for advice about optimization and evmVersion

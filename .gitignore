@@ -2,3 +2,4 @@ node_modules
 .key
 .DS_Store
 .idea
+.env.json

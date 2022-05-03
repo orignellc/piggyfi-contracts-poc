@@ -1,24 +1,31 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract CustodianWalletProxy {
+import "./Types.sol";
+
+contract CustodianWalletProxy is Types {
   /// @notice address of factory
   address public factory;
+
+  /// @notice address of wallet logic to
+  /// copy code from and call using delegatecall
   address public immutable logic;
+
+  /// @notice address of escrow contract
   address public immutable ochestrator;
 
   /**
    * @param _logic address of already deployed Custodian Wallet that can receive upgrade
-   * @param _ochestrator address of Ochestrator that can has sole control over all custodian wallets
+   * @param _ochestrator address of Escrow that can has sole control over all custodian wallets
    */
   constructor(
     address _logic,
     address _ochestrator,
     address _factory
   ) {
-    factory = _factory;
-    logic = _logic;
     ochestrator = _ochestrator;
+    logic = _logic;
+    factory = _factory;
   }
 
   // prettier-ignore
@@ -30,15 +37,16 @@ contract CustodianWalletProxy {
    * already deployed proxy wallets benefit from new updates.
    *
    * Since msg.sender when calling Wallet Logic chnages to address(this) due to usage of delegate call
-   * we are unable to determinable set a modifier on functions in Wallet Logic to limit calls to Tickeo Factory.
-   * So we require that caller to all wallet proxies to call our wallet logic can only be factory.
+   * we are unable to determinable set a modifier on functions in Wallet Logic to limit calls to Escrow.
+   * So we require that caller to all wallet proxies to call our wallet logic can only be escrow.
    *
    *
    * Credit to https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/Proxy.sol
    */
-  fallback() external payable { // solhint-disable-line no-complex-fallback
+  fallback() external payable {
+    // solhint-disable-line no-complex-fallback
 
-    require(msg.sender ==  ochestrator, "WalletProxy: Only ochestrator");
+    require(msg.sender == ochestrator, "WP: deployer only");
 
     address _impl = logic;
 
@@ -47,28 +55,29 @@ contract CustodianWalletProxy {
       revert("Logic contract not set");
     }
 
-    assembly {  // solhint-disable-line no-inline-assembly
-            // Copy msg.data. We take full control of memory in this inline assembly
-            // block because it will not return to Solidity code. We overwrite the
-            // Solidity scratch pad at memory position 0.
-            calldatacopy(0, 0, calldatasize())
+    assembly {
+      // solhint-disable-line no-inline-assembly
+      // Copy msg.data. We take full control of memory in this inline assembly
+      // block because it will not return to Solidity code. We overwrite the
+      // Solidity scratch pad at memory position 0.
+      calldatacopy(0, 0, calldatasize())
 
-            // Call the implementation.
-            // out and outsize are 0 because we don't know the size yet.
-            let result := delegatecall(gas(), _impl, 0, calldatasize(), 0, 0)
+      // Call the implementation.
+      // out and outsize are 0 because we don't know the size yet.
+      let result := delegatecall(gas(), _impl, 0, calldatasize(), 0, 0)
 
-            // Copy the returned data.
-            returndatacopy(0, 0, returndatasize())
+      // Copy the returned data.
+      returndatacopy(0, 0, returndatasize())
 
-            switch result
-            // delegatecall returns 0 on error.
-            case 0 {
-                revert(0, returndatasize())
-            }
-            default {
-                return(0, returndatasize())
-            }
-        }
+      switch result
+      // delegatecall returns 0 on error.
+      case 0 {
+        revert(0, returndatasize())
+      }
+      default {
+        return(0, returndatasize())
+      }
+    }
   }
 
   // ======== Receive =========
