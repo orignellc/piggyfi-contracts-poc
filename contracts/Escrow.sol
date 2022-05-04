@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Types.sol";
 
 contract Escrow is Types {
@@ -59,6 +59,7 @@ contract Escrow is Types {
       _rate,
       _fee,
       _orderType,
+      0, // open
       block.timestamp,
       0
     );
@@ -77,7 +78,8 @@ contract Escrow is Types {
       _amount,
       _rate,
       _fee,
-      _orderType
+      _orderType,
+      0 // open
     );
 
     return orderId;
@@ -106,8 +108,20 @@ contract Escrow is Types {
     Order storage order = orders[_orderId];
 
     order.fulfiledTime = block.timestamp;
+    order.orderStatus = 1; // closed
 
-    emit ClosedOrder(_orderId);
+    emit ClosedOrder(
+      _orderId,
+      order.seller,
+      order.buyer,
+      order.receiver,
+      order.amount,
+      order.rate,
+      order.fee,
+      order.orderType,
+      order.fulfiledTime,
+      order.orderStatus
+    );
   }
 
   /**

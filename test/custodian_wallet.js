@@ -104,5 +104,15 @@ contract("CustodianWalletLogic", function ([deployer]) {
     //   from: deployer,
     //   data: data,
     // });
+
+    const openOrders = await this.escrow.getOpenOrdersOf(this.vendorA);
+    console.log("Response: ", openOrders);
+    console.log(openOrders.map((id) => id.toString()));
+    // const order = await this.escrow.getOrderById(this.orderId);
+    // const custodianWalletBBalance = this.usdc.balanceOf(this.custodianWalletB);
+
+    // assert.equal(openOrders.length, 0);
+    // assert.IsTrue(order.fulfiledTime > 0);
+    // assert.equal(custodianWalletBBalance, utils.parseEther("100"));
   });
 });

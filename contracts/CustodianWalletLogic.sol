@@ -13,7 +13,7 @@ contract CustodianWalletLogic is Types {
   }
 
   function getOpenOrders() external view returns (uint256[] memory) {
-    return _getEscrow().getOpenOrdersOf(address(this));
+    return _getOpenOrders();
   }
 
   function _getUsdcBalance() internal view returns (uint256) {
@@ -76,20 +76,30 @@ contract CustodianWalletLogic is Types {
 
   /// @notice returns operating balance of the seller custodian wallet (total USD balance - open orders against wallet)
   function availBalance() external view returns (uint256) {
-    uint256[] memory openOrders = this.getOpenOrders();
-    uint256 balance = this.getTotalBalance();
+    return _availBalance();
+  }
+
+  function _availBalance() internal view returns (uint256) {
+    uint256[] memory openOrders = _getOpenOrders();
+    uint256 balance = _getUsdcBalance();
 
     for (uint256 queue = 0; queue < (openOrders.length - 1); queue++) {
       Order memory order = _getEscrow().getOrderById(openOrders[queue]);
       balance -= order.amount; // subtract amount of open order
+      balance -= order.fee; // subtract fee of open order
     }
 
     return balance;
   }
 
-  function approveOrder(uint256 _orderId) external {
-    uint256[] memory openOrders = this.getOpenOrders();
+  function _getOpenOrders() internal view returns (uint256[] memory) {
+    return _getEscrow().getOpenOrdersOf(address(this));
+  }
 
+  function approveOrder(uint256 _orderId) external {
+    uint256[] memory openOrders = _getOpenOrders();
+
+    require(openOrders.length > 0, "CWL: no open orders");
     Order memory order = _getEscrow().getOrderById(openOrders[_orderId]);
 
     require(order.seller == address(this), "CWL: invalid order");
@@ -109,7 +119,7 @@ contract CustodianWalletLogic is Types {
     require(_to != address(this), "CWL: self forbidden");
     require(_to != address(0x0), "CWL: invalid to address");
     require(_amount > 0, "CWL: amount cannot equal 0");
-    require(this.availBalance() >= _amount, "CWL: insufficient funds");
+    require(_availBalance() >= _amount, "CWL: insufficient funds");
 
     IERC20(_getEscrow().usdcToken()).transfer(_to, _amount);
     IERC20(_getEscrow().usdcToken()).transfer(address(_getEscrow()), _fee);
