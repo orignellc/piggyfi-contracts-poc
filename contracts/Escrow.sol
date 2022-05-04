@@ -29,6 +29,22 @@ contract Escrow is Types {
 
   constructor(address _ochestrator) {
     ochestrator = _ochestrator;
+
+    //Create default order on zero index
+    Order memory order = Order(
+      address(0x0), // seller
+      address(0x0), // buyer
+      address(0x0), // receiver
+      0,
+      0,
+      0,
+      0,
+      1, // closed
+      block.timestamp, // startTime
+      block.timestamp // fulfilledTime
+    );
+
+    orders.push(order);
   }
 
   /**
@@ -101,9 +117,12 @@ contract Escrow is Types {
     return orders[_orderId];
   }
 
-  function closeOpenOrder(address _seller, uint256 _orderId) public {
+  function closeOpenOrder(address _seller, uint256 _orderIndex) public {
     require(msg.sender == _seller, "C: only seller");
-    delete openOrders[_seller][_orderId];
+
+    uint256 _orderId = openOrders[_seller][_orderIndex];
+
+    delete openOrders[_seller][_orderIndex];
 
     Order storage order = orders[_orderId];
 

@@ -32,7 +32,7 @@ contract("CustodianWalletLogic", function ([deployer]) {
     this.custodianWalletB = await this.factory.accounts(uniqueIdD);
 
     // Fund vendorA custodian wallet
-    await this.usdc.transfer(this.vendorA, utils.parseEther("200"));
+    await this.usdc.transfer(this.vendorA, utils.parseEther("500"));
 
     // Remittance flow lifecycle
     //Step 1: customerA -> NGN(offchain) -> vendorA
@@ -42,10 +42,10 @@ contract("CustodianWalletLogic", function ([deployer]) {
     //Step 5: customerB -> USDC(onchain) -> vendorB    (Escrow charge fees from here)
   });
 
-  it("should assert that vendorA has 200 USDC to start remittance flow", async function () {
+  it("should assert that vendorA has 500 USDC to start remittance flow", async function () {
     const balance = await this.usdc.balanceOf(this.vendorA);
 
-    return assert.equal(balance.toString(), utils.parseEther("200").toString());
+    return assert.equal(balance.toString(), utils.parseEther("500").toString());
   });
 
   it("should assert that usd token can be changed", async function () {
@@ -76,13 +76,21 @@ contract("CustodianWalletLogic", function ([deployer]) {
       data: data,
     });
 
-    const orders = await this.escrow.getOpenOrdersOf(this.vendorA);
-    const orderId = orders[0].toNumber();
+    // Open a second buy order. For test accuracy purposes
+    await proxy.sendTransaction({
+      from: deployer,
+      data: data,
+    });
+
+    const openOrders = await this.escrow.getOpenOrdersOf(this.vendorA);
+    console.log(openOrders);
+
+    const orderId = openOrders[1].toNumber();
     const order = await this.escrow.getOrderById(orderId);
 
     this.orderId = orderId;
 
-    assert.equal(orders.length, 1);
+    assert.equal(openOrders.length, 2);
     assert.equal(order.seller, this.vendorA);
     assert.equal(order.amount.toString(), utils.parseEther("100").toString());
     assert.equal(order.rate.toString(), utils.parseEther("580").toString());
@@ -92,7 +100,11 @@ contract("CustodianWalletLogic", function ([deployer]) {
   });
 
   it("should assert vendorA can approve buy order", async function () {
-    const params = [this.orderId];
+    let openOrders = await this.escrow.getOpenOrdersOf(this.vendorA);
+    openOrders = openOrders.map((id) => id.toNumber());
+
+    const orderIndex = openOrders.indexOf(this.orderId);
+    const params = [orderIndex];
 
     const ABI = ["function approveOrder(uint256 _orderId) external"];
     const interface = new utils.Interface(ABI);
@@ -100,19 +112,24 @@ contract("CustodianWalletLogic", function ([deployer]) {
 
     const proxy = await CustodianWalletProxy.at(this.vendorA);
 
-    // await proxy.sendTransaction({
-    //   from: deployer,
-    //   data: data,
-    // });
+    await proxy.sendTransaction({
+      from: deployer,
+      data: data,
+    });
 
-    const openOrders = await this.escrow.getOpenOrdersOf(this.vendorA);
-    console.log("Response: ", openOrders);
-    console.log(openOrders.map((id) => id.toString()));
-    // const order = await this.escrow.getOrderById(this.orderId);
-    // const custodianWalletBBalance = this.usdc.balanceOf(this.custodianWalletB);
+    let recentOpenOrders = await this.escrow.getOpenOrdersOf(this.vendorA);
+    recentOpenOrders = recentOpenOrders.map((id) => id.toString());
 
-    // assert.equal(openOrders.length, 0);
-    // assert.IsTrue(order.fulfiledTime > 0);
-    // assert.equal(custodianWalletBBalance, utils.parseEther("100"));
+    const order = await this.escrow.getOrderById(this.orderId);
+    const receiverUSDBalance = await this.usdc.balanceOf(this.custodianWalletB);
+    const escrowUSDBalance = await this.usdc.balanceOf(this.escrow.address);
+
+    assert.equal(recentOpenOrders[orderIndex], 0); // Order in this position should be 0. Deleting an element from an array replace item with 0
+    assert.isTrue(order.fulfiledTime > 0); // Order fulfilled time should be greater than 0  because it is approved
+    assert.equal(
+      receiverUSDBalance.toString(),
+      utils.parseEther("100").toString()
+    ); // reciever balance
+    assert.equal(escrowUSDBalance.toString(), utils.parseEther("1").toString()); // reciever balance
   });
 });

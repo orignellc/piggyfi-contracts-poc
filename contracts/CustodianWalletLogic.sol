@@ -38,7 +38,7 @@ contract CustodianWalletLogic is Types {
     require(usdcAddress != address(0x0), "CWL: usdc token not set");
 
     require(
-      IERC20(usdcAddress).balanceOf(_seller) >= _amount,
+      IERC20(usdcAddress).balanceOf(_seller) >= _amount + _fee,
       "C: not enough USD"
     );
 
@@ -96,15 +96,17 @@ contract CustodianWalletLogic is Types {
     return _getEscrow().getOpenOrdersOf(address(this));
   }
 
-  function approveOrder(uint256 _orderId) external {
+  function approveOrder(uint256 _openOrderIndex) external {
     uint256[] memory openOrders = _getOpenOrders();
 
     require(openOrders.length > 0, "CWL: no open orders");
-    Order memory order = _getEscrow().getOrderById(openOrders[_orderId]);
+    uint256 _orderId = openOrders[_openOrderIndex];
+
+    Order memory order = _getEscrow().getOrderById(_orderId);
 
     require(order.seller == address(this), "CWL: invalid order");
 
-    _getEscrow().closeOpenOrder(address(this), _orderId);
+    _getEscrow().closeOpenOrder(address(this), _openOrderIndex);
 
     _sendFunds(order.receiver, order.amount, order.fee);
 
