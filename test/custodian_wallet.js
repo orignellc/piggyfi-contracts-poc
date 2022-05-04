@@ -132,4 +132,11 @@ contract("CustodianWalletLogic", function ([deployer]) {
     ); // reciever balance
     assert.equal(escrowUSDBalance.toString(), utils.parseEther("1").toString()); // reciever balance
   });
+
+  // @Todo: Test for seller to cancel order
+  // Seller cancel the order
+  // Buyer approves the order cancelled by seller
+  // The order is marked as canceled & removed from seller open order, no futher action is taken.
+  // Else if the reject request is rejected by the seller, the order is still opened while a dispute is created and event fired.
+  // Dispute is resolved offline by Escrow provider.
 });
