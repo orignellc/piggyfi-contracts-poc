@@ -31,7 +31,8 @@ contract Types {
     FULFILLED, // order is fulfilled
     CANCELLED, // order is cancelled
     EXPIRED, // order is expired (not fulfilled)
-    REJECTED // order is rejected by seller
+    REJECTED, // order is rejected by seller
+    REFUNDED // order is refunded to the seller
   }
 
   ////////////////////////////////////////
