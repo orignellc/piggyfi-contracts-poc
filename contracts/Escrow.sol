@@ -164,4 +164,24 @@ contract Escrow is Types {
 
     IERC20(usdcToken).transfer(ochestrator, totalFeeEarned);
   }
+
+  function rejectOrder(address _seller, uint256 _orderId) public {
+    require(msg.sender == _seller, "C: only seller");
+
+    Order storage order = orders[_orderId];
+
+    order.orderStatus = 4; // rejected
+
+    emit RejectedOrder(_orderId);
+  }
+
+  function consentOrderRejected(address _buyer, uint256 _orderIndex) public {
+    require(msg.sender == _buyer, "C: only buyer");
+
+    uint256 _orderId = openOrders[_buyer][_orderIndex];
+
+    delete openOrders[_buyer][_orderIndex];
+
+    emit ApproveRejectedOrder(_orderId);
+  }
 }

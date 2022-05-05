@@ -113,6 +113,26 @@ contract CustodianWalletLogic is Types {
     emit OrderFulfilled(_orderId);
   }
 
+  function rejectOrder(uint256 _orderId) external {
+    Order memory order = _getEscrow().getOrderById(_orderId);
+
+    require(order.seller == address(this), "CWL: only seller");
+
+    _getEscrow().rejectOrder(address(this), _orderId);
+  }
+
+  function consentOrderRejected(uint256 _openOrderIndex) external {
+    uint256[] memory openOrders = _getOpenOrders();
+
+    uint256 _orderId = openOrders[_openOrderIndex];
+
+    Order memory order = _getEscrow().getOrderById(_orderId);
+
+    require(order.buyer == address(this), "CWL: only buyer");
+
+    _getEscrow().consentOrderRejected(address(this), _openOrderIndex);
+  }
+
   function _sendFunds(
     address _to,
     uint256 _amount,

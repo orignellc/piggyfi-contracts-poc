@@ -67,4 +67,8 @@ contract Types {
     uint256 fulfiledTime,
     uint8 orderStatus
   );
+
+  event RejectedOrder(uint256 orderId);
+
+  event ApproveRejectedOrder(uint256 orderId);
 }
