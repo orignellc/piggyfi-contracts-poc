@@ -140,4 +140,6 @@ contract("CustodianWalletLogic", function ([deployer]) {
   // Else if the cancel action is rejected by the buyer (Probable Fraud), the order is still opened while a dispute is created with buyer comment and event fired.
   // Dispute is resolved offline by Escrow provider.
   // Escroow calls action to either mark the order as FULFILL or REFUNDED.
+
+  it("should assert vendorA can reject order and its fully rejected if customerB approve", async function () {});
 });
