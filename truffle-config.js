@@ -28,7 +28,7 @@ module.exports = {
   plugins: ["truffle-plugin-verify"],
 
   api_keys: {
-    snowtrace: snowtraceApiKey,
+    snowtrace: `1FFBUQYA41I9Z1Q168XT3GJ627MRYMDPT8`,
   },
 
   /**
@@ -65,6 +65,23 @@ module.exports = {
       skipDryRun: true,
       networkCheckTimeoutnetworkCheckTimeout: 60000,
       network_id: "43113",
+
+      // gas: 3000000,
+      // gasPrice: 470000000000,
+      // skipDryRun: true,
+    },
+    avax: {
+      provider: function () {
+        return new HDWalletProvider(
+          privateKey,
+          `https://api.avax.network/ext/bc/C/rpc`
+        );
+      },
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      networkCheckTimeoutnetworkCheckTimeout: 60000,
+      network_id: "43114",
 
       // gas: 3000000,
       // gasPrice: 470000000000,
