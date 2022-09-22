@@ -13,7 +13,7 @@ contract CustodianWalletLogic is Types {
   }
 
   function getOpenOrders() external view returns (uint256[] memory) {
-    return _getEscrow().getOpenOrdersOf(address(this));
+    return _getOpenOrders();
   }
 
   function _getUsdcBalance() internal view returns (uint256) {
@@ -38,7 +38,7 @@ contract CustodianWalletLogic is Types {
     require(usdcAddress != address(0x0), "CWL: usdc token not set");
 
     require(
-      IERC20(usdcAddress).balanceOf(_seller) >= _amount,
+      IERC20(usdcAddress).balanceOf(_seller) >= _amount + _fee,
       "C: not enough USD"
     );
 
@@ -76,29 +76,61 @@ contract CustodianWalletLogic is Types {
 
   /// @notice returns operating balance of the seller custodian wallet (total USD balance - open orders against wallet)
   function availBalance() external view returns (uint256) {
-    uint256[] memory openOrders = this.getOpenOrders();
-    uint256 balance = this.getTotalBalance();
+    return _availBalance();
+  }
+
+  function _availBalance() internal view returns (uint256) {
+    uint256[] memory openOrders = _getOpenOrders();
+    uint256 balance = _getUsdcBalance();
 
     for (uint256 queue = 0; queue < (openOrders.length - 1); queue++) {
       Order memory order = _getEscrow().getOrderById(openOrders[queue]);
       balance -= order.amount; // subtract amount of open order
+      balance -= order.fee; // subtract fee of open order
     }
 
     return balance;
   }
 
-  function approveOrder(uint256 _orderId) external {
-    uint256[] memory openOrders = this.getOpenOrders();
+  function _getOpenOrders() internal view returns (uint256[] memory) {
+    return _getEscrow().getOpenOrdersOf(address(this));
+  }
 
-    Order memory order = _getEscrow().getOrderById(openOrders[_orderId]);
+  function approveOrder(uint256 _openOrderIndex) external {
+    uint256[] memory openOrders = _getOpenOrders();
+
+    require(openOrders.length > 0, "CWL: no open orders");
+    uint256 _orderId = openOrders[_openOrderIndex];
+
+    Order memory order = _getEscrow().getOrderById(_orderId);
 
     require(order.seller == address(this), "CWL: invalid order");
 
-    _getEscrow().closeOpenOrder(address(this), _orderId);
+    _getEscrow().closeOpenOrder(address(this), _openOrderIndex);
 
     _sendFunds(order.receiver, order.amount, order.fee);
 
     emit OrderFulfilled(_orderId);
+  }
+
+  function rejectOrder(uint256 _orderId) external {
+    Order memory order = _getEscrow().getOrderById(_orderId);
+
+    require(order.seller == address(this), "CWL: only seller");
+
+    _getEscrow().rejectOrder(address(this), _orderId);
+  }
+
+  function consentOrderRejected(uint256 _openOrderIndex) external {
+    uint256[] memory openOrders = _getOpenOrders();
+
+    uint256 _orderId = openOrders[_openOrderIndex];
+
+    Order memory order = _getEscrow().getOrderById(_orderId);
+
+    require(order.buyer == address(this), "CWL: only buyer");
+
+    _getEscrow().consentOrderRejected(address(this), _openOrderIndex);
   }
 
   function _sendFunds(
@@ -109,7 +141,7 @@ contract CustodianWalletLogic is Types {
     require(_to != address(this), "CWL: self forbidden");
     require(_to != address(0x0), "CWL: invalid to address");
     require(_amount > 0, "CWL: amount cannot equal 0");
-    require(this.availBalance() >= _amount, "CWL: insufficient funds");
+    require(_availBalance() >= _amount, "CWL: insufficient funds");
 
     IERC20(_getEscrow().usdcToken()).transfer(_to, _amount);
     IERC20(_getEscrow().usdcToken()).transfer(address(_getEscrow()), _fee);

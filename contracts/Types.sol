@@ -11,6 +11,7 @@ contract Types {
     uint256 rate;
     uint256 fee;
     uint8 orderType;
+    uint8 orderStatus;
     uint256 startTime;
     uint256 fulfiledTime;
   }
@@ -23,6 +24,15 @@ contract Types {
   enum OrderType {
     BUY,
     SELL
+  }
+
+  enum OrderStatus {
+    OPEN, // order is open
+    FULFILLED, // order is fulfilled
+    CANCELLED, // order is cancelled
+    EXPIRED, // order is expired (not fulfilled)
+    REJECTED, // order is rejected by seller
+    REFUNDED // order is refunded to the seller
   }
 
   ////////////////////////////////////////
@@ -39,10 +49,26 @@ contract Types {
     uint256 amount,
     uint256 rate,
     uint256 fee,
-    uint8 orderType
+    uint8 orderType,
+    uint8 orderStatus
   );
 
   event OrderFulfilled(uint256 orderId);
 
-  event ClosedOrder(uint256 orderId);
+  event ClosedOrder(
+    uint256 orderId,
+    address indexed seller,
+    address indexed buyer,
+    address indexed receiver,
+    uint256 amount,
+    uint256 rate,
+    uint256 fee,
+    uint8 orderType,
+    uint256 fulfiledTime,
+    uint8 orderStatus
+  );
+
+  event RejectedOrder(uint256 orderId);
+
+  event ApproveRejectedOrder(uint256 orderId);
 }

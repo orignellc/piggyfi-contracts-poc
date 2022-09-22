@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Types.sol";
 
 contract Escrow is Types {
@@ -29,6 +29,22 @@ contract Escrow is Types {
 
   constructor(address _ochestrator) {
     ochestrator = _ochestrator;
+
+    //Create default order on zero index
+    Order memory order = Order(
+      address(0x0), // seller
+      address(0x0), // buyer
+      address(0x0), // receiver
+      0,
+      0,
+      0,
+      0,
+      1, // closed
+      block.timestamp, // startTime
+      block.timestamp // fulfilledTime
+    );
+
+    orders.push(order);
   }
 
   /**
@@ -59,6 +75,7 @@ contract Escrow is Types {
       _rate,
       _fee,
       _orderType,
+      0, // open
       block.timestamp,
       0
     );
@@ -77,7 +94,8 @@ contract Escrow is Types {
       _amount,
       _rate,
       _fee,
-      _orderType
+      _orderType,
+      0 // open
     );
 
     return orderId;
@@ -99,15 +117,30 @@ contract Escrow is Types {
     return orders[_orderId];
   }
 
-  function closeOpenOrder(address _seller, uint256 _orderId) public {
+  function closeOpenOrder(address _seller, uint256 _orderIndex) public {
     require(msg.sender == _seller, "C: only seller");
-    delete openOrders[_seller][_orderId];
+
+    uint256 _orderId = openOrders[_seller][_orderIndex];
+
+    delete openOrders[_seller][_orderIndex];
 
     Order storage order = orders[_orderId];
 
     order.fulfiledTime = block.timestamp;
+    order.orderStatus = 1; // closed
 
-    emit ClosedOrder(_orderId);
+    emit ClosedOrder(
+      _orderId,
+      order.seller,
+      order.buyer,
+      order.receiver,
+      order.amount,
+      order.rate,
+      order.fee,
+      order.orderType,
+      order.fulfiledTime,
+      order.orderStatus
+    );
   }
 
   /**
@@ -130,5 +163,25 @@ contract Escrow is Types {
     uint256 totalFeeEarned = IERC20(usdcToken).balanceOf(address(this));
 
     IERC20(usdcToken).transfer(ochestrator, totalFeeEarned);
+  }
+
+  function rejectOrder(address _seller, uint256 _orderId) public {
+    require(msg.sender == _seller, "C: only seller");
+
+    Order storage order = orders[_orderId];
+
+    order.orderStatus = 4; // rejected
+
+    emit RejectedOrder(_orderId);
+  }
+
+  function consentOrderRejected(address _buyer, uint256 _orderIndex) public {
+    require(msg.sender == _buyer, "C: only buyer");
+
+    uint256 _orderId = openOrders[_buyer][_orderIndex];
+
+    delete openOrders[_buyer][_orderIndex];
+
+    emit ApproveRejectedOrder(_orderId);
   }
 }
